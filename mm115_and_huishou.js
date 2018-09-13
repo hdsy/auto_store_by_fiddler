@@ -1,3 +1,9 @@
+static function strVar1(var1:String)
+{
+	return "\"" + var1.Replace('\"','\\\"').Replace ('\n','\\n').Replace('\r','\\r') + "\"";
+
+}
+
 static function OnBeforeResponse(oSession: Session) 
 {
         if (m_Hide304s && oSession.responseCode == 304) 
@@ -124,14 +130,16 @@ static function OnBeforeResponse(oSession: Session)
 			else
 			{					
 				oSession["ui-strikeout"] = "true";
+			
 			}
+		
 		}
 	}
 		
 	// store json
 	try
 	{
-        if 
+        	if 
 		(
 			// from certain site like weixin.qq.com ...
 			(
@@ -217,81 +225,87 @@ static function OnBeforeResponse(oSession: Session)
 
 
 			file.close(); 
-			}
-            catch(exp)
-            {
-            
-                var txt="Error description: " + exp.message + "\n\n";
-                FiddlerObject.alert(txt);
-                oSession["ui-strikeout"] = "true";
-            
-            }
 		
-		 // write access t_call_record
-            try
-            {
-                var con =new ActiveXObject("ADODB.Connection");
-            
-                //con.Provider="Microsoft.ACE.OLEDB.18.0";
-                
-                
-        
-                var rs=new ActiveXObject("ADODB.Recordset");
-                
-                /**
-                Provider=Microsoft.ACE.OLEDB.12.0;Data Source=Y:/TEST/fiddler_web_service_analysis.accdb;Persist Security Info=False;
-                **/
-        
-                //var access_db_path = "d:/fiddler_web_service_analysis.accdb" ;
-        
-                //con.ConnectionString="Data Source="+access_db_path;
-        
-                con.open("DSN=www.wucar.com.cn;") ;
-                
-                
-                //FiddlerObject.alert(1);
-                
-                
-                
-            
-                var sql = "insert into  t_call_record (call_timestamp,request_send_timestamp,response_recv_timestamp,sitename,url,request,response,spend_second,content_type,content_length) values(" +
-                    strVar1(oSession.Timers.FiddlerBeginRequest) + "," +
-                    strVar1(oSession.Timers.ClientDoneRequest) + "," +
-                    strVar1(oSession.Timers.ServerDoneResponse) + "," +
-                    strVar1(oSession.RequestHeaders.AllValues("Host")) + "," +
-                    strVar1(oSession.url.Substring (0,whindex)) + "," +
-                    strVar1(oSession.RequestHeaders.ToString ()+oSession.GetRequestBodyAsString()) + "," +
-                    strVar1(oSession.ResponseHeaders.ToString ()+oSession.GetResponseBodyAsString()) + "," +
-                    etimes*1000  + "," +
-                    strVar1(oSession.ResponseHeaders.AllValues("Content-Type")) +"," +
-                    oSession.ResponseHeaders.AllValues("Content-Length")
-                    
-                    +");";
-                
-                //FiddlerObject.alert(sql);
-            
-                rs.open(sql,con);
-                
-                oSession["ui-color"] = "red";
-            
-                //rs.close();
-                // rs=NULL;
-            
-                con.close();
-                // con = NULL;
-                
-                
-                
-            }
-            catch(exp)
-            {
-            
-                var txt="Error description: " + exp.message + "\n\n";
-                FiddlerObject.alert(txt);
-                oSession["ui-strikeout"] = "true";
-            
-            }
-
-		return;
+		}
+	
 	}
+	catch(exp)
+	{
+
+		var txt="Error description: " + exp.message + "\n\n";
+		FiddlerObject.alert(txt);
+		oSession["ui-strikeout"] = "true";
+
+	
+	}
+		
+	// write access t_call_record
+	try
+	{
+		var con =new ActiveXObject("ADODB.Connection");
+
+		//con.Provider="Microsoft.ACE.OLEDB.18.0";
+
+
+
+		var rs=new ActiveXObject("ADODB.Recordset");
+
+		/**
+		Provider=Microsoft.ACE.OLEDB.12.0;Data Source=Y:/TEST/fiddler_web_service_analysis.accdb;Persist Security Info=False;
+		**/
+
+		//var access_db_path = "d:/fiddler_web_service_analysis.accdb" ;
+
+		//con.ConnectionString="Data Source="+access_db_path;
+
+		con.open("DSN=www.wucar.com.cn;") ;
+
+
+		//FiddlerObject.alert(1);
+
+
+
+
+		var sql = "insert into  t_call_record (call_timestamp,request_send_timestamp,response_recv_timestamp,sitename,url,request,response,spend_second,content_type,content_length) values(" +
+		    strVar1(oSession.Timers.FiddlerBeginRequest) + "," +
+		    strVar1(oSession.Timers.ClientDoneRequest) + "," +
+		    strVar1(oSession.Timers.ServerDoneResponse) + "," +
+		    strVar1(oSession.RequestHeaders.AllValues("Host")) + "," +
+		    strVar1(oSession.url.Substring (0,whindex)) + "," +
+		    strVar1(oSession.RequestHeaders.ToString ()+oSession.GetRequestBodyAsString()) + "," +
+		    strVar1(oSession.ResponseHeaders.ToString ()+oSession.GetResponseBodyAsString()) + "," +
+		    etimes*1000  + "," +
+		    strVar1(oSession.ResponseHeaders.AllValues("Content-Type")) +"," +
+		    oSession.ResponseHeaders.AllValues("Content-Length")
+
+		    +");";
+
+		//FiddlerObject.alert(sql);
+
+		rs.open(sql,con);
+
+		oSession["ui-color"] = "red";
+
+		//rs.close();
+		// rs=NULL;
+
+		con.close();
+		// con = NULL;
+
+                
+                
+	
+	}
+	catch(exp)
+	{
+
+		var txt="Error description: " + exp.message + "\n\n";
+		FiddlerObject.alert(txt);
+		oSession["ui-strikeout"] = "true";
+
+	}
+
+	return;
+
 }
+
