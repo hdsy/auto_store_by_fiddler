@@ -129,92 +129,168 @@ static function OnBeforeResponse(oSession: Session)
 	}
 		
 	// store json
+	try
+	{
         if 
-	(
-		// from certain site like weixin.qq.com ...
 		(
-			oSession.RequestHeaders.AllValues("Host").Contains(".weixin.qq.com") || 
-           		oSession.RequestHeaders.AllValues("Host").Contains(".growingio.com") || 
-           		oSession.RequestHeaders.AllValues("Host").Contains(".huatuo.qq.com") || 
-			oSession.RequestHeaders.AllValues("Host").Contains(".aihuishou.com") || 
-			oSession.RequestHeaders.AllValues("Host").Contains(".huishoubao.com") 
-		) &&
-		// and content-type is text/html or application/json
-		(
-			oSession.ResponseHeaders.AllValues("Content-Type").Contains("application/json") ||
+			// from certain site like weixin.qq.com ...
 			(
-				oSession.ResponseHeaders.AllValues("Content-Type").Contains("text/html") && 
-				// and not htm ,png,ico and jpg . (some developers are so chedan ,they can give an ico for json)		
+				oSession.RequestHeaders.AllValues("Host").Contains(".weixin.qq.com") || 
+					oSession.RequestHeaders.AllValues("Host").Contains(".growingio.com") || 
+					oSession.RequestHeaders.AllValues("Host").Contains(".huatuo.qq.com") || 
+				oSession.RequestHeaders.AllValues("Host").Contains(".aihuishou.com") || 
+				oSession.RequestHeaders.AllValues("Host").Contains(".huishoubao.com") 
+			) &&
+			// and content-type is text/html or application/json
+			(
+				oSession.ResponseHeaders.AllValues("Content-Type").Contains("application/json") ||
 				(
-					(! oSession.url.Contains(".htm")) && 
-					(! oSession.url.Contains(".png")) && 
-					(! oSession.url.Contains(".ico")) && 
-					(! oSession.url.Contains(".jpg"))
-				)&&
-				(
-					// even blank should be store ,otherwise should be json structure
-					(oSession.GetResponseBodyAsString()+"{    ").Substring(0,3).Contains ("{")
+					oSession.ResponseHeaders.AllValues("Content-Type").Contains("text/html") && 
+					// and not htm ,png,ico and jpg . (some developers are so chedan ,they can give an ico for json)		
+					(
+						(! oSession.url.Contains(".htm")) && 
+						(! oSession.url.Contains(".png")) && 
+						(! oSession.url.Contains(".ico")) && 
+						(! oSession.url.Contains(".jpg"))
+					)&&
+					(
+						// even blank should be store ,otherwise should be json structure
+						(oSession.GetResponseBodyAsString()+"{    ").Substring(0,3).Contains ("{")
+					)
 				)
 			)
 		)
-	)
-	{ 
-		// earse the confusion codes...
-		oSession.utilDecodeResponse();
+		{ 
+			// earse the confusion codes...
+			oSession.utilDecodeResponse();
 
-		var fso; 
-		var file; 
+			var fso; 
+			var file; 
 
-		var whindex = oSession.url.IndexOf ('?');			
+			var whindex = oSession.url.IndexOf ('?');			
 
-		if (whindex <= 0)
-			whindex = oSession.url.Length;
-
-
-		var file_url = oSession.url.Substring (0,whindex).Replace ('/','_').Replace('%','B').Replace('?','7').Replace('&','-');
+			if (whindex <= 0)
+				whindex = oSession.url.Length;
 
 
-		var etimes = (oSession.Timers.ServerDoneResponse-oSession.Timers.ClientDoneRequest).ToString().Replace(':','_');
-
-		fso = new ActiveXObject("Scripting.FileSystemObject");      
-		// file path ,and the site dir	 
-		if(oSession.RequestHeaders.AllValues("Host").Contains(".aihuishou.com"))
-		{
-			if( ! fso.FolderExists("d:/TEST/aihuishou/"+oSession.RequestHeaders.AllValues("Host")))
-				fso.CreateFolder ("d:/TEST/aihuishou/"+oSession.RequestHeaders.AllValues("Host"));
-
-			file = fso.OpenTextFile("d:/TEST/aihuishou/"+oSession.RequestHeaders.AllValues("Host")+"/"+file_url+".txt",8,true,true);
-		}
-		else if(oSession.RequestHeaders.AllValues("Host").Contains(".huishoubao.com"))
-		{
-			if( ! fso.FolderExists("d:/TEST/huishoubao/"+oSession.RequestHeaders.AllValues("Host")))
-				fso.CreateFolder ("d:/TEST/huishoubao/"+oSession.RequestHeaders.AllValues("Host"));
-
-			file = fso.OpenTextFile("d:/TEST/huishoubao/"+oSession.RequestHeaders.AllValues("Host")+"/"+file_url+".txt",8,true,true)
-		}
-		else
-		{
-			if( ! fso.FolderExists("d:/TEST/"+oSession.RequestHeaders.AllValues("Host")))
-				fso.CreateFolder ("d:/TEST/"+oSession.RequestHeaders.AllValues("Host"));
-			file = fso.OpenTextFile("d:/TEST/"+oSession.RequestHeaders.AllValues("Host")+"/"+file_url+".txt",8,true,true)
-
-		}
-
-		//oSession.WriteResponseToStream(fso,false); 
+			var file_url = oSession.url.Substring (0,whindex).Replace ('/','_').Replace('%','B').Replace('?','7').Replace('&','-');
 
 
-		//file.writeLine( oSession.ResponseHeaders.AllValues ("Content-Type"));
-		//file.writeLine( "\r\n fullUrl: "+ oSession.fullUrl.ToString () ); 
-		file.writeLine("{{======"+oSession.Timers.FiddlerBeginRequest.ToString() + " ：" + oSession.Timers.FiddlerGotResponseHeaders.ToString() ); 
+			var etimes = (oSession.Timers.ServerDoneResponse-oSession.Timers.ClientDoneRequest).ToString().Replace(':','_');
 
-		file.writeLine( oSession.RequestHeaders.ToString ()); 
-		file.writeLine( oSession.GetRequestBodyAsString() );
-		file.writeLine( oSession.ResponseHeaders.ToString());
-		file.writeLine( oSession.GetResponseBodyAsString() );			
-		file.writeLine( etimes+"======}}" ); 
+			fso = new ActiveXObject("Scripting.FileSystemObject");      
+			// file path ,and the site dir	 
+			if(oSession.RequestHeaders.AllValues("Host").Contains(".aihuishou.com"))
+			{
+				if( ! fso.FolderExists("d:/TEST/aihuishou/"+oSession.RequestHeaders.AllValues("Host")))
+					fso.CreateFolder ("d:/TEST/aihuishou/"+oSession.RequestHeaders.AllValues("Host"));
+
+				file = fso.OpenTextFile("d:/TEST/aihuishou/"+oSession.RequestHeaders.AllValues("Host")+"/"+file_url+".txt",8,true,true);
+			}
+			else if(oSession.RequestHeaders.AllValues("Host").Contains(".huishoubao.com"))
+			{
+				if( ! fso.FolderExists("d:/TEST/huishoubao/"+oSession.RequestHeaders.AllValues("Host")))
+					fso.CreateFolder ("d:/TEST/huishoubao/"+oSession.RequestHeaders.AllValues("Host"));
+
+				file = fso.OpenTextFile("d:/TEST/huishoubao/"+oSession.RequestHeaders.AllValues("Host")+"/"+file_url+".txt",8,true,true)
+			}
+			else
+			{
+				if( ! fso.FolderExists("d:/TEST/"+oSession.RequestHeaders.AllValues("Host")))
+					fso.CreateFolder ("d:/TEST/"+oSession.RequestHeaders.AllValues("Host"));
+				file = fso.OpenTextFile("d:/TEST/"+oSession.RequestHeaders.AllValues("Host")+"/"+file_url+".txt",8,true,true)
+
+			}
+
+			//oSession.WriteResponseToStream(fso,false); 
+
+
+			//file.writeLine( oSession.ResponseHeaders.AllValues ("Content-Type"));
+			//file.writeLine( "\r\n fullUrl: "+ oSession.fullUrl.ToString () ); 
+			file.writeLine("{{======"+oSession.Timers.FiddlerBeginRequest.ToString() + " ：" + oSession.Timers.FiddlerGotResponseHeaders.ToString() ); 
+
+			file.writeLine( oSession.RequestHeaders.ToString ()); 
+			file.writeLine( oSession.GetRequestBodyAsString() );
+			file.writeLine( oSession.ResponseHeaders.ToString());
+			file.writeLine( oSession.GetResponseBodyAsString() );			
+			file.writeLine( etimes+"======}}" ); 
+
+
+			file.close(); 
+			}
+            catch(exp)
+            {
             
-
-		file.close(); 
+                var txt="Error description: " + exp.message + "\n\n";
+                FiddlerObject.alert(txt);
+                oSession["ui-strikeout"] = "true";
+            
+            }
+		
+		 // write access t_call_record
+            try
+            {
+                var con =new ActiveXObject("ADODB.Connection");
+            
+                //con.Provider="Microsoft.ACE.OLEDB.18.0";
+                
+                
+        
+                var rs=new ActiveXObject("ADODB.Recordset");
+                
+                /**
+                Provider=Microsoft.ACE.OLEDB.12.0;Data Source=Y:/TEST/fiddler_web_service_analysis.accdb;Persist Security Info=False;
+                **/
+        
+                //var access_db_path = "d:/fiddler_web_service_analysis.accdb" ;
+        
+                //con.ConnectionString="Data Source="+access_db_path;
+        
+                con.open("DSN=www.wucar.com.cn;") ;
+                
+                
+                //FiddlerObject.alert(1);
+                
+                
+                
+            
+                var sql = "insert into  t_call_record (call_timestamp,request_send_timestamp,response_recv_timestamp,sitename,url,request,response,spend_second,content_type,content_length) values(" +
+                    strVar1(oSession.Timers.FiddlerBeginRequest) + "," +
+                    strVar1(oSession.Timers.ClientDoneRequest) + "," +
+                    strVar1(oSession.Timers.ServerDoneResponse) + "," +
+                    strVar1(oSession.RequestHeaders.AllValues("Host")) + "," +
+                    strVar1(oSession.url.Substring (0,whindex)) + "," +
+                    strVar1(oSession.RequestHeaders.ToString ()+oSession.GetRequestBodyAsString()) + "," +
+                    strVar1(oSession.ResponseHeaders.ToString ()+oSession.GetResponseBodyAsString()) + "," +
+                    etimes*1000  + "," +
+                    strVar1(oSession.ResponseHeaders.AllValues("Content-Type")) +"," +
+                    oSession.ResponseHeaders.AllValues("Content-Length")
+                    
+                    +");";
+                
+                //FiddlerObject.alert(sql);
+            
+                rs.open(sql,con);
+                
+                oSession["ui-color"] = "red";
+            
+                //rs.close();
+                // rs=NULL;
+            
+                con.close();
+                // con = NULL;
+                
+                
+                
+            }
+            catch(exp)
+            {
+            
+                var txt="Error description: " + exp.message + "\n\n";
+                FiddlerObject.alert(txt);
+                oSession["ui-strikeout"] = "true";
+            
+            }
 
 		return;
 	}
