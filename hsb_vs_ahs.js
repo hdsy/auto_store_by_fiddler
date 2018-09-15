@@ -257,7 +257,8 @@
         
                 //con.ConnectionString="Data Source="+access_db_path;
         
-                con.open("DSN=www.wucar.com.cn;") ;
+		//ODBC DSN name ,config by windows odbc
+                con.open("DSN=db_hsb_vs_ahs;") ;
                 
                 
                 //FiddlerObject.alert(1);
