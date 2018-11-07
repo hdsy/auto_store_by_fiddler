@@ -70,29 +70,13 @@
 
                 // you can enum and confire not store duplicated
                 var file_path  = img_dir+"jpg/"+file_url;
-                var file_path1 = img_dir+"jpg/20180904/"+file_url;
-                var file_path2 = img_dir+"jpg/20180905/"+file_url;
-                var file_path3 = img_dir+"jpg/20180906/"+file_url;
-                var file_path4 = img_dir+"jpg/20180907/"+file_url;
-                var file_path5 = img_dir+"jpg/20180910/"+file_url;
-                var file_path6 = img_dir+"jpg/20180911/"+file_url;
-                var file_path7 = img_dir+"jpg/20180912/"+file_url;
-                var file_path8 = img_dir+"jpg/20180913/"+file_url;
 				
                 var fso = new ActiveXObject("Scripting.FileSystemObject"); 
 			
                 // if not exist file_url 
                 if 
                 (
-                    (false == fso.FileExists(file_path ))&& 
-                    (false == fso.FileExists(file_path1))&& 
-                    (false == fso.FileExists(file_path2))&& 
-                    (false == fso.FileExists(file_path3))&& 
-                    (false == fso.FileExists(file_path4))&& 
-                    (false == fso.FileExists(file_path5))&& 
-                    (false == fso.FileExists(file_path6))&& 
-                    (false == fso.FileExists(file_path7))&& 
-                    (false == fso.FileExists(file_path8)) 
+                    (false == fso.FileExists(file_path ))
                 )
                 {
 			
