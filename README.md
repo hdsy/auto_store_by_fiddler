@@ -29,7 +29,11 @@ Edit the script to store the certain content-type from certain site. Store the r
   
   ![avarta](https://github.com/hdsy/fiddler_capture_storage/blob/master/fiddler_configure%20for%20agency%20smartphone%20004.png)
   
-  2. install the cert ,following the step 
+  2. install the cert ,following the notice , next - click ...
+  3. network config as below:
+   ![avarta](https://github.com/hdsy/fiddler_capture_storage/blob/master/smart_phone_s1.jpg)
+   ![avarta](https://github.com/hdsy/fiddler_capture_storage/blob/master/smart_phone_s2.jpg)
+   ![avarta](https://github.com/hdsy/fiddler_capture_storage/blob/master/smart_phone_s3.jpg)
 
 ## config your DSN
   1. windows [run] -> odbc
