@@ -23,7 +23,14 @@ Edit the script to store the certain content-type from certain site. Store the r
   1. [windows start menu]-->[run] -> cmd -> ipconfig
   
   ![avarta](https://github.com/hdsy/fiddler_capture_storage/blob/master/fiddler_configure%20for%20agency%20smartphone%20003.png)
- 
+
+## config your DSN on the node which running fiddler
+  1. windows [run] -> odbc
+   ![avarta](https://github.com/hdsy/fiddler_capture_storage/blob/master/obdc_dsn.png)
+
+## database prepared as below , here is mysql
+  ![avarta](https://github.com/hdsy/fiddler_capture_storage/blob/master/db_table_instance.png)
+
 ## on your smartphone
   1. type url http://ip:8888 ,and you will see like this
   
@@ -35,9 +42,6 @@ Edit the script to store the certain content-type from certain site. Store the r
    ![avarta](https://github.com/hdsy/fiddler_capture_storage/blob/master/smart_phone_s2.jpg)
    ![avarta](https://github.com/hdsy/fiddler_capture_storage/blob/master/smart_phone_s3.jpg)
 
-## config your DSN
-  1. windows [run] -> odbc
-   ![avarta](https://github.com/hdsy/fiddler_capture_storage/blob/master/obdc_dsn.png)
 
 ## now it works ...
   1. visit the site you want to capture, on your smartphone
