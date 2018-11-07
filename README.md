@@ -36,3 +36,5 @@ Edit the script to store the certain content-type from certain site. Store the r
    ![avarta](https://github.com/hdsy/fiddler_capture_storage/blob/master/obdc_dsn.png)
 
 ## now it works ...
+  1. vistit the site you want to capture, on your smartphone
+  
